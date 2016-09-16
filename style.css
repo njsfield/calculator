@@ -49,10 +49,6 @@ th {
     color: white;
 }
 
-td:focus {
-    background: white;
-
-}
 
 .highlighted {
     background: grey;
