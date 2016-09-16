@@ -1,44 +1,14 @@
-
 var display = document.getElementById("display");
 
 
 var calc = {
 
-    numbers : {
-        'ZERO' : '0',
-        'ONE' : '1',
-        'TWO' : '2',
-        'THREE' : '3',
-        'FOUR' : '4',
-        'FIVE' : '5',
-        'SIX' : '6',
-        'SEVEN' : '7',
-        'EIGHT' : '8',
-        'NINE' : '9',
-    },
-
-    operators : {
-
-        'AC' : 'ac',
-        'CE' : 'ce',
-        'POSNEG' : '±',
-        'DIVIDE' : '/',
-        'MULTIPLY' : 'x',
-        'MINUS' : '-',
-        'PLUS' : '+',
-        'DECIMAL' : '.',
-        'EQUALS' : '='
-
-    }
+    xreg : '0',
+    yreg : undefined,
+    flag : undefined,
+    lastOperation : undefined
 
 }
-
-
-
-calc.xreg = '0';
-calc.yreg = undefined;
-calc.flag = undefined;
-calc.lastOperation;
 
 
 // Add click events to elements
@@ -49,24 +19,11 @@ for (var i = 0; i < calcButtons.length; i++) {
 
     calcButtons[i].addEventListener("click", function(){
 
-        buttonClick(this.id);
+        handleInput(this.innerHTML.toLowerCase());
     })
 }
 
 
-
-// Register button click into calculator method
-
-function buttonClick(element) {
-
-    var calcMethod = calc.numbers[element] ||
-                      calc.operators[element] ;
-
-    handleInput(calcMethod);
-}
-
-
-// /\./.test(calculator.xreg
 
 // handles input
 
@@ -100,6 +57,14 @@ function xreg(value) {
 
         case '.' :
 
+            if (calc.lastOperation === '=') {
+
+                calc.xreg = String(calc.yreg);
+                calc.yreg = calc.flag = undefined;
+            }
+
+
+
             calc.xreg += (/\./.test(calc.xreg)) ? '' : '.';
             break;
 
@@ -126,6 +91,11 @@ function xreg(value) {
 
         default :
 
+           if (calc.lastOperation === '=') {
+
+                clear();
+            }
+
             calc.xreg = (calc.xreg === '0') ? value : calc.xreg + value;
 
             break;
@@ -149,12 +119,12 @@ function flagRegister(operator) {
 
         calc.yreg = calc.xreg;
         calc.xreg = '0';
-        calc.lastOperation = 'operator';
+        calc.lastOperation = operator;
 
     } else if (calc.lastOperation === "=") {
 
         calc.xreg = '0';
-        calc.lastOperation = 'operator';
+        calc.lastOperation = operator;
 
     } else {
 
@@ -169,7 +139,7 @@ function flagRegister(operator) {
 
 function clear(){
 
-    calc.flag = calc.yreg = undefined;
+    calc.flag = calc.yreg = calc.lastOperation = undefined;
 
     calc.xreg = '0';
 
@@ -185,9 +155,13 @@ function calculate() {
 
     if (calc.yreg === undefined) return;
 
-    var result = eval(calc.yreg + calc.flag + calc.xreg);
+    if (calc.flag === "x") calc.flag = "*";
+
+    var result = eval(calc.yreg + " " + calc.flag + " " + calc.xreg);
+
+    if (/\d*.\d{7,}/.test(String(result))) result = Number(result.toFixed(7));
+
+    result = String(result).replace(/(\d*\.\d*)(0+)$/, "$1");
 
     display.innerHTML = calc.yreg = result;
-
-    console.log(result);
 }
