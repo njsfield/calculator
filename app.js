@@ -19,7 +19,16 @@ for (var i = 0; i < calcButtons.length; i++) {
 
     calcButtons[i].addEventListener("click", function(){
 
-        handleInput(this.innerHTML.toLowerCase());
+        var that = this;
+
+        handleInput(that.innerHTML.toLowerCase());
+
+        that.classList.add("highlighted");
+
+        setTimeout(function(){
+           that.classList.remove("highlighted");
+        },100);
+
     })
 }
 

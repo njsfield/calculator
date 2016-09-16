@@ -48,3 +48,12 @@ th {
     background: red;
     color: white;
 }
+
+td:focus {
+    background: white;
+
+}
+
+.highlighted {
+    background: grey;
+}
