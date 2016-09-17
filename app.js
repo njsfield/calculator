@@ -4,9 +4,9 @@ var display = document.getElementById("display");
 var calc = {
 
     xreg : '0',
-    yreg : undefined,
-    flag : undefined,
-    lastOperation : undefined
+    yreg : null,
+    flag : null,
+    lastOperation : null
 
 }
 
@@ -69,7 +69,7 @@ function xreg(value) {
             if (calc.lastOperation === '=') {
 
                 calc.xreg = String(calc.yreg);
-                calc.yreg = calc.flag = undefined;
+                calc.yreg = calc.flag = null;
             }
 
 
@@ -87,11 +87,11 @@ function xreg(value) {
             if (calc.lastOperation === '=') {
 
                 calc.xreg = calc.yreg;
-                calc.yreg = undefined;
-                calc.lastOperation = undefined;
+                calc.yreg = null;
+                calc.lastOperation = null;
             }
 
-            calc.xreg = (calc.xreg[0] != '-') ? '-' + (+calc.xreg || '') : calc.xreg.slice(1);
+            calc.xreg = (calc.xreg[0] != '-') ? '-' + (+calc.xreg || '') : (calc.xreg.slice(1) || '0');
             break;
 
         case 'ce' :
@@ -124,7 +124,7 @@ function xreg(value) {
 function flagRegister(operator) {
 
 
-    if (calc.yreg === undefined) {
+    if (calc.yreg === null) {
 
         calc.yreg = calc.xreg;
         calc.lastOperation = operator;
@@ -147,7 +147,7 @@ function flagRegister(operator) {
 
 function clear(){
 
-    calc.flag = calc.yreg = calc.lastOperation = undefined;
+    calc.flag = calc.yreg = calc.lastOperation = null;
 
     calc.xreg = '0';
 
@@ -161,7 +161,7 @@ function clear(){
 
 function calculate() {
 
-    if (calc.yreg === undefined) return;
+    if (calc.yreg === null) return;
 
     if (calc.flag === "x") calc.flag = "*";
 
