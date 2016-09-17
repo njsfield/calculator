@@ -21,14 +21,13 @@ for (var i = 0; i < calcButtons.length; i++) {
 
         var that = this;
 
-        handleInput(that.innerHTML.toLowerCase());
-
-        that.classList.add("highlighted");
+        that.style.backgroundColor = "grey";
 
         setTimeout(function(){
-           that.classList.remove("highlighted");
+           that.style.backgroundColor = "black";
         },100);
 
+	handleInput(that.innerHTML.toLowerCase());
     })
 }
 
