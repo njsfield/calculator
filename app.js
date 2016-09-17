@@ -148,9 +148,11 @@ function calculate() {
 
     if (calc.flag === "x") calc.flag = "*";
 
-    var result = eval(calc.yreg + " " + calc.flag + " " + calc.xreg);
+    var evalFunction = new Function("x", "y", "return y " + calc.flag + " x;")
 
-    if (/\d*.\d{7,}/.test(String(result))) result = Number(result.toFixed(7));
+    var result = evalFunction(+calc.xreg, +calc.yreg);
+
+    if (/\d*.\d{7,}/.test(String(result))) result = Number(+result.toFixed(7));
 
     result = String(result).replace(/(\d*\.\d*)(0+)$/, "$1");
 
