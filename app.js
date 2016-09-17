@@ -84,10 +84,11 @@ function xreg(value) {
 
         case '±' :
 
-            if (calc.yreg !== undefined) {
+            if (calc.lastOperation === '=') {
 
-                calc.xreg = String(calc.yreg);
-                calc.yreg = calc.flag = undefined;
+                calc.xreg = calc.yreg;
+                calc.yreg = undefined;
+                calc.lastOperation = undefined;
             }
 
             calc.xreg = (calc.xreg[0] != '-') ? '-' + (+calc.xreg || '') : calc.xreg.slice(1);
@@ -130,7 +131,6 @@ function flagRegister(operator) {
 
     } else if (calc.lastOperation === "=") {
 
-        calc.xreg = '0';
         calc.lastOperation = operator;
 
     } else {
