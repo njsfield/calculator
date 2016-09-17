@@ -122,12 +122,10 @@ function xreg(value) {
 
 function flagRegister(operator) {
 
-    calc.flag = operator;
 
     if (calc.yreg === undefined) {
 
         calc.yreg = calc.xreg;
-        calc.xreg = '0';
         calc.lastOperation = operator;
 
     } else if (calc.lastOperation === "=") {
@@ -140,7 +138,8 @@ function flagRegister(operator) {
         calculate();
 
     }
-
+        calc.flag = operator;
+        calc.xreg = '0';
 
 }
 
