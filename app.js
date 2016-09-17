@@ -62,17 +62,14 @@ function handleInput(value) {
 
 function xreg(value) {
 
+    if (calc.lastOperation === '=') {
+
+        clear();
+    }
+
     switch(value) {
 
         case '.' :
-
-            if (calc.lastOperation === '=') {
-
-                calc.xreg = String(calc.yreg);
-                calc.yreg = calc.flag = null;
-            }
-
-
 
             calc.xreg += (/\./.test(calc.xreg)) ? '' : '.';
             break;
@@ -84,14 +81,7 @@ function xreg(value) {
 
         case '±' :
 
-            if (calc.lastOperation === '=') {
-
-                calc.xreg = calc.yreg;
-                calc.yreg = null;
-                calc.lastOperation = null;
-            }
-
-            calc.xreg = (calc.xreg[0] != '-') ? '-' + (+calc.xreg || '') : (calc.xreg.slice(1) || '0');
+            calc.xreg = (calc.xreg[0] !== '-') ? '-' + (+calc.xreg || '') : (calc.xreg.slice(1) || '0');
             break;
 
         case 'ce' :
@@ -101,13 +91,7 @@ function xreg(value) {
 
         default :
 
-           if (calc.lastOperation === '=') {
-
-                clear();
-            }
-
             calc.xreg = (calc.xreg === '0') ? value : calc.xreg + value;
-
             break;
     }
 
