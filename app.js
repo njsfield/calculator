@@ -1,13 +1,11 @@
-function Calc(display) {
+function Calc(output) {
 
-    this.display = document.getElementById(display);
+    this.output = document.getElementById(output);
+
     this.xreg = '0';
     this.yreg = null;
     this.flag = null;
     this.lastOperation = null;
-
-    var that = this;
-
 
 
     // handles input
@@ -141,34 +139,88 @@ function Calc(display) {
 
 
 
-    // Add click events to elements
-
-    this.calcButtons = document.getElementsByTagName('td');
 
 
-    Array.prototype.forEach.call(this.calcButtons, function(button){
-
-        button.addEventListener("click", function(event){
-
-            event.target.style.backgroundColor = "grey";
-
-            setTimeout(function(){
-
-               event.target.style.backgroundColor = "black";
-
-            },100);
-
-        that.handleInput(event.target.innerHTML.toLowerCase());
-
-        });
-
-    });
+    //// DOM Calculator creation
 
 
-}
+    // Initially create table
 
-
-var myCalc = new Calc("display");
+    this.table = document.createElement("table");
 
 
 
+    // Set the display output
+
+    this.display = document.createElement("th");
+
+
+        //give it style attributes and initial '0' value
+
+        this.display.innerHTML = "0";
+        this.display.setAttribute("colspan", "4");
+        this.display.setAttribute("id", "display");
+
+    this.table.appendChild(this.display);
+
+
+
+    // Holds buttons in the order they should appear in DOM Element
+
+    var buttons = [
+        ['AC','CE','±','/'],
+        ['7','8','9','x'],
+        ['4','5','6','-'],
+        ['1','2','3','+'],
+        ['0','.','=']
+    ]
+
+
+
+
+    // Append 5 tr elements, with td elements matching buttons array
+
+    for (var i = 0; i < 5; i++) {
+
+
+        var that = this; // to use 'this' in deep scope
+
+        var tr = document.createElement("tr");
+
+        this.table.appendChild(tr);
+
+
+        for (var j = 0; j < buttons[i].length; j++) {
+
+            var td = document.createElement("td");
+
+            td.innerHTML = buttons[i][j];
+
+            if (buttons[i][j] == '+') td.setAttribute("rowspan", "2");
+
+            // event listener to fire handleInput function with correct value when pressed
+
+            td.addEventListener("click", function(event){
+
+                that.handleInput(event.target.innerHTML);
+
+            });
+
+            tr.appendChild(td);
+
+        };
+
+
+
+    };
+
+    //display calculator
+
+    this.output.appendChild(this.table);
+
+
+};
+
+
+
+var myCalc = new Calc("calc");
