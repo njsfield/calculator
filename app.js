@@ -18,17 +18,17 @@ var calcButtons = document.getElementsByTagName('td')
 
 Array.prototype.forEach.call(calcButtons, function(button){
 
-    button.addEventListener("click", function(){
+    button.addEventListener("click", function(event){
 
-        var that = this;
-
-        that.style.backgroundColor = "grey";
+        event.target.style.backgroundColor = "grey";
 
         setTimeout(function(){
-           that.style.backgroundColor = "black";
+
+           event.target.style.backgroundColor = "black";
+
         },100);
 
-	handleInput(that.innerHTML.toLowerCase());
+	handleInput(event.target.innerHTML.toLowerCase());
     })
 
 })
