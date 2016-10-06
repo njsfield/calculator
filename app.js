@@ -1,162 +1,174 @@
-var display = document.getElementById("display");
+function Calc(display) {
 
+    this.display = document.getElementById(display);
+    this.xreg = '0';
+    this.yreg = null;
+    this.flag = null;
+    this.lastOperation = null;
 
-var calc = {
-
-    xreg : '0',
-    yreg : null,
-    flag : null,
-    lastOperation : null
-
-}
-
-
-// Add click events to elements
-
-var calcButtons = document.getElementsByTagName('td')
-
-
-Array.prototype.forEach.call(calcButtons, function(button){
-
-    button.addEventListener("click", function(event){
-
-        event.target.style.backgroundColor = "grey";
-
-        setTimeout(function(){
-
-           event.target.style.backgroundColor = "black";
-
-        },100);
-
-	handleInput(event.target.innerHTML.toLowerCase());
-    })
-
-})
+    var that = this;
 
 
 
-// handles input
+    // handles input
 
-function handleInput(value) {
+    this.handleInput = function(value) {
 
-    if (/[01234567890.±]|ce/.test(value)) {
+        if (/[01234567890.±]|ce/.test(value)) {
 
-        xreg(value);
+            this.updateXreg(value);
 
-    } else if (/[/+x-]/.test(value)) {
+        } else if (/[/+x-]/.test(value)) {
 
-        flagRegister(value);
+            this.flagRegister(value);
 
-    } else if (value === '='){
+        } else if (value === '='){
 
-        calculate();
-        calc.lastOperation = '=';
+            this.calculate();
+            this.lastOperation = '=';
 
-    } else {
+        } else {
 
-        clear();
+            this.clear();
+        }
+
     }
 
-}
 
-// handle xreg
+     // handle xreg
 
-function xreg(value) {
+    this.updateXreg = function (value) {
 
-    if (calc.lastOperation === '=') {
+        if (this.lastOperation === '=') {
 
-        clear();
-    }
+            this.clear();
+        }
 
-    switch(value) {
+        switch(value) {
 
-        case '.' :
+            case '.' :
 
-            calc.xreg += (/\./.test(calc.xreg)) ? '' : '.';
-            break;
+                this.xreg += (/\./.test(this.xreg)) ? '' : '.';
+                break;
 
-        case '0' :
+            case '0' :
 
-            calc.xreg += (calc.xreg !== '0') ? '0' : '';
-            break;
+                this.xreg += (this.xreg !== '0') ? '0' : '';
+                break;
 
-        case '±' :
+            case '±' :
 
-            calc.xreg = (calc.xreg[0] !== '-') ? '-' + (+calc.xreg || '') : (calc.xreg.slice(1) || '0');
-            break;
+                this.xreg = (this.xreg[0] !== '-') ? '-' + (+this.xreg || '') : (this.xreg.slice(1) || '0');
+                break;
 
-        case 'ce' :
+            case 'ce' :
 
-            calc.xreg = '0';
-            break;
+                this.xreg = '0';
+                break;
 
-        default :
+            default :
 
-            calc.xreg = (calc.xreg === '0') ? value : calc.xreg + value;
-            break;
+                this.xreg = (this.xreg === '0') ? value : this.xreg + value;
+                break;
+        }
+
+
+        this.display.innerHTML = this.xreg;
+
     }
 
 
-    display.innerHTML = calc.xreg;
-
-}
+    // handle flag
 
 
-
-// handle flag
-
-
-function flagRegister(operator) {
+    this.flagRegister = function(operator) {
 
 
-    if (calc.yreg === null) {
+        if (this.yreg === null) {
 
-        calc.yreg = calc.xreg;
-        calc.lastOperation = operator;
+            this.yreg = this.xreg;
+            this.lastOperation = operator;
 
-    } else if (calc.lastOperation === "=") {
+        } else if (this.lastOperation === "=") {
 
-        calc.lastOperation = operator;
+            this.lastOperation = operator;
 
-    } else {
+        } else {
 
-        calculate();
+            this.calculate();
+
+        }
+            this.flag = operator;
+            this.xreg = '0';
 
     }
-        calc.flag = operator;
-        calc.xreg = '0';
+
+
+
+    // clear
+
+    this.clear = function(){
+
+        this.flag = this.yreg = this.lastOperation = null;
+
+        this.xreg = '0';
+
+        this.display.innerHTML = this.xreg;
+
+    }
+
+
+
+    // calculate
+
+    this.calculate = function() {
+
+        if (this.yreg === null) return;
+
+        if (this.flag === "x") this.flag = "*";
+
+        var evalFunction = new Function("x", "y", "return y " + this.flag + " x;")
+
+        var result = evalFunction(+this.xreg, +this.yreg);
+
+        if (/\d*.\d{7,}/.test(String(result))) result = Number(+result.toFixed(7));
+
+        result = String(result).replace(/(\d*\.\d*)(0+)$/, "$1");
+
+        this.display.innerHTML = this.yreg = result;
+    }
+
+
+
+
+    // Add click events to elements
+
+    this.calcButtons = document.getElementsByTagName('td');
+
+
+    Array.prototype.forEach.call(this.calcButtons, function(button){
+
+        button.addEventListener("click", function(event){
+
+            event.target.style.backgroundColor = "grey";
+
+            setTimeout(function(){
+
+               event.target.style.backgroundColor = "black";
+
+            },100);
+
+        that.handleInput(event.target.innerHTML.toLowerCase());
+
+        });
+
+    });
+
 
 }
 
-// clear
 
-function clear(){
-
-    calc.flag = calc.yreg = calc.lastOperation = null;
-
-    calc.xreg = '0';
-
-    display.innerHTML = calc.xreg;
-
-}
+var myCalc = new Calc("display");
 
 
 
-// calculate
-
-function calculate() {
-
-    if (calc.yreg === null) return;
-
-    if (calc.flag === "x") calc.flag = "*";
-
-    var evalFunction = new Function("x", "y", "return y " + calc.flag + " x;")
-
-    var result = evalFunction(+calc.xreg, +calc.yreg);
-
-    if (/\d*.\d{7,}/.test(String(result))) result = Number(+result.toFixed(7));
-
-    result = String(result).replace(/(\d*\.\d*)(0+)$/, "$1");
-
-    display.innerHTML = calc.yreg = result;
-}
