@@ -1,4 +1,4 @@
-function Calc(output) {
+function Calc (output) {
 
     this.output = document.getElementById(output);
 
