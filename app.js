@@ -15,9 +15,10 @@ var calc = {
 
 var calcButtons = document.getElementsByTagName('td')
 
-for (var i = 0; i < calcButtons.length; i++) {
 
-    calcButtons[i].addEventListener("click", function(){
+Array.prototype.forEach.call(calcButtons, function(button){
+
+    button.addEventListener("click", function(){
 
         var that = this;
 
@@ -29,7 +30,8 @@ for (var i = 0; i < calcButtons.length; i++) {
 
 	handleInput(that.innerHTML.toLowerCase());
     })
-}
+
+})
 
 
 
