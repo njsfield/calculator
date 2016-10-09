@@ -1,16 +1,21 @@
-function Calc (output) {
 
-    this.output = document.getElementById(output);
+// Goal- Implement ES6 solutions
 
-    this.xreg = '0';
-    this.yreg = null;
-    this.flag = null;
-    this.lastOperation = null;
+class Calc {
+
+    constructor() {
+
+        this.xreg = '0';
+        this.yreg = null;
+        this.flag = null;
+        this.lastOperation = null;
+        
+    };
 
 
     // handles input
 
-    this.handleInput = function(value) {
+    handleInput(value) {
 
         if (/[01234567890.±]|ce/.test(value)) {
 
@@ -30,12 +35,12 @@ function Calc (output) {
             this.clear();
         }
 
-    }
+    };
 
 
      // handle xreg
 
-    this.updateXreg = function (value) {
+    updateXreg(value) {
 
         if (this.lastOperation === '=') {
 
@@ -73,13 +78,13 @@ function Calc (output) {
 
         this.display.innerHTML = this.xreg;
 
-    }
+    };
 
 
     // handle flag
 
 
-    this.flagRegister = function(operator) {
+    flagRegister(operator) {
 
 
         if (this.yreg === null) {
@@ -99,13 +104,13 @@ function Calc (output) {
             this.flag = operator;
             this.xreg = '0';
 
-    }
+    };
 
 
 
     // clear
 
-    this.clear = function(){
+    clear(){
 
         this.flag = this.yreg = this.lastOperation = null;
 
@@ -113,13 +118,13 @@ function Calc (output) {
 
         this.display.innerHTML = this.xreg;
 
-    }
+    };
 
 
 
     // calculate
 
-    this.calculate = function() {
+    calculate() {
 
         if (this.yreg === null) return;
 
@@ -134,7 +139,7 @@ function Calc (output) {
         result = String(result).replace(/(\d*\.\d*)(0+)$/, "$1");
 
         this.display.innerHTML = this.yreg = result;
-    }
+    };
 
 
 
@@ -143,84 +148,88 @@ function Calc (output) {
 
     //// DOM Calculator creation
 
+    build(output) {
+        
+        this.output = document.getElementById(output);
+    
+        // Initially create table
 
-    // Initially create table
-
-    this.table = document.createElement("table");
-
-
-
-    // Set the display output
-
-    this.display = document.createElement("th");
+        this.table = document.createElement("table");
 
 
-        //give it style attributes and initial '0' value
+        // Set the display output
 
-        this.display.innerHTML = "0";
-        this.display.setAttribute("colspan", "4");
-        this.display.setAttribute("id", "display");
-
-    this.table.appendChild(this.display);
+        this.display = document.createElement("th");
 
 
+            //give it style attributes and initial '0' value
 
-    // Holds buttons in the order they should appear in DOM Element
+            this.display.innerHTML = "0";
+            this.display.setAttribute("colspan", "4");
+            this.display.setAttribute("id", "display");
 
-    var buttons = [
-        ['AC','CE','±','/'],
-        ['7','8','9','x'],
-        ['4','5','6','-'],
-        ['1','2','3','+'],
-        ['0','.','=']
-    ]
+        this.table.appendChild(this.display);
 
 
 
+        // Holds buttons in the order they should appear in DOM Element
 
-    // Append 5 tr elements, with td elements matching buttons array
-
-    for (var i = 0; i < 5; i++) {
-
-
-        var that = this; // to use 'this' in deep scope
-
-        var tr = document.createElement("tr");
-
-        this.table.appendChild(tr);
+        var buttons = [
+            ['AC','CE','±','/'],
+            ['7','8','9','x'],
+            ['4','5','6','-'],
+            ['1','2','3','+'],
+            ['0','.','=']
+        ]
 
 
-        for (var j = 0; j < buttons[i].length; j++) {
 
-            var td = document.createElement("td");
 
-            td.innerHTML = buttons[i][j];
+        // Append 5 tr elements, with td elements matching buttons array
 
-            if (buttons[i][j] == '+') td.setAttribute("rowspan", "2");
+        for (var i = 0; i < 5; i++) {
 
-            // event listener to fire handleInput function with correct value when pressed
+            var that = this; // to use 'this' in deep scope
 
-            td.addEventListener("click", function(event){
+            var tr = document.createElement("tr");
 
-                that.handleInput(event.target.innerHTML);
+            this.table.appendChild(tr);
 
-            });
 
-            tr.appendChild(td);
+            for (var j = 0; j < buttons[i].length; j++) {
+
+                var td = document.createElement("td");
+
+                td.innerHTML = buttons[i][j];
+
+                if (buttons[i][j] == '+') td.setAttribute("rowspan", "2");
+
+                // event listener to fire handleInput function with correct value when pressed
+
+                td.addEventListener("click", function(event){
+
+                    that.handleInput(event.target.innerHTML);
+
+                });
+
+                tr.appendChild(td);
+
+            };
+
+
 
         };
 
+        //display calculator
 
-
-    };
-
-    //display calculator
-
-    this.output.appendChild(this.table);
+        this.output.appendChild(this.table);
+        
+    }
 
 
 };
 
 
 
-var myCalc = new Calc("calc");
+var myCalc = new Calc();
+myCalc.build("calc");
