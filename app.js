@@ -1,5 +1,10 @@
+// Tasks
+//// Use loop in constructor to generate object for values
+/// add object for values for . + ce in constructor
 
-// Goal- Implement ES6 solutions
+// add object for operands
+
+// object for equals and clear
 
 class Calc {
 
@@ -10,6 +15,34 @@ class Calc {
         this.flag = null;
         this.lastOperation = null;
         
+        
+        // values & operands objects
+        
+        this.values = {};
+        this.operands = {};
+        
+            // add number methods
+        
+            for (let i = 1; i <= 9; i++) {
+                this.values[String(i)] = x => this.numberInput(x);
+            }
+        
+            
+            this.values['.'] = x => this.decimal();
+            this.values['0'] = x => this.zero();
+            this.values['ce'] = x => this.ce();
+            this.values['±'] = x => this.plusMinus();
+        
+            
+        
+            // add operands
+        
+            ['/','+','x','-'].forEach((opp) => this.operands[opp] = opp);
+        
+            
+        
+            
+        
     };
 
 
@@ -17,15 +50,13 @@ class Calc {
 
     handleInput(value) {
 
-        if (/[01234567890.±]|ce/.test(value)) {
+        if (this.values[value]) {
 
             this.updateXreg(value);
 
-        } else if (/[/+x-]/.test(value)) {
+        } else if (this.operands[value]) {
 
             this.flagRegister(value);
-            this.flag = value;
-            this.xreg = '0';
 
         } else if (value === '='){
 
@@ -49,38 +80,34 @@ class Calc {
             this.clear();
         }
 
-        switch(value) {
-
-            case '.' :
-
-                this.xreg += (/\./.test(this.xreg)) ? '' : '.';
-                break;
-
-            case '0' :
-
-                this.xreg += (this.xreg !== '0') ? '0' : '';
-                break;
-
-            case '±' :
-
-                this.xreg = (this.xreg[0] !== '-') ? '-' + (+this.xreg || '') : (this.xreg.slice(1) || '0');
-                break;
-
-            case 'ce' :
-
-                this.xreg = '0';
-                break;
-
-            default :
-
-                this.xreg = (this.xreg === '0') ? value : this.xreg + value;
-                break;
-        }
-
+        this.values[value](value);
 
         this.display.innerHTML = this.xreg;
 
     };
+    
+    
+    // Methods 
+    
+    numberInput(value) {
+        this.xreg = (this.xreg === '0') ? value : this.xreg + value;
+    }
+    
+    decimal(){
+        this.xreg += (/\./.test(this.xreg)) ? '' : '.';
+    }
+    
+    zero(){
+        this.xreg += (this.xreg !== '0') ? '0' : '';
+    }
+    
+    ce(){
+        this.xreg = '0';
+    }
+    
+    plusMinus(){
+        this.xreg = (this.xreg[0] !== '-') ? '-' + (+this.xreg || '') : (this.xreg.slice(1) || '0');
+    }
 
 
     // handle flag
@@ -103,6 +130,9 @@ class Calc {
             this.calculate();
 
         }
+        
+        this.flag = operator;
+        this.xreg = '0';
 
 
     };
@@ -115,9 +145,7 @@ class Calc {
 
         this.flag = this.yreg = this.lastOperation = null;
 
-        this.xreg = '0';
-
-        this.display.innerHTML = this.xreg;
+        this.display.innerHTML = this.xreg = '0';
 
     };
 
