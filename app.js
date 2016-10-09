@@ -190,9 +190,9 @@ class Calc {
 
         for (let i = 0; i < 5; i++) {
 
-            var that = this; // to use 'this' in deep scope
+            let that = this; // to use 'this' in deep scope
 
-            var tr = document.createElement("tr");
+            let tr = document.createElement("tr");
 
             this.table.appendChild(tr);
 
