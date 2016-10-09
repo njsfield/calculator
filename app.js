@@ -131,9 +131,9 @@ class Calc {
 
         if (this.flag === "x") this.flag = "*";
 
-        var evalFunction = new Function("x", "y", "return y " + this.flag + " x;")
+        let evalFunction = new Function("x", "y", "return y " + this.flag + " x;")
 
-        var result = evalFunction(+this.xreg, +this.yreg);
+        let result = evalFunction(+this.xreg, +this.yreg);
 
         if (/\d*.\d{7,}/.test(String(result))) result = Number(+result.toFixed(7));
 
@@ -175,7 +175,7 @@ class Calc {
 
         // Holds buttons in the order they should appear in DOM Element
 
-        var buttons = [
+        let buttons = [
             ['AC','CE','±','/'],
             ['7','8','9','x'],
             ['4','5','6','-'],
@@ -188,7 +188,7 @@ class Calc {
 
         // Append 5 tr elements, with td elements matching buttons array
 
-        for (var i = 0; i < 5; i++) {
+        for (let i = 0; i < 5; i++) {
 
             var that = this; // to use 'this' in deep scope
 
@@ -197,9 +197,9 @@ class Calc {
             this.table.appendChild(tr);
 
 
-            for (var j = 0; j < buttons[i].length; j++) {
+            for (let j = 0; j < buttons[i].length; j++) {
 
-                var td = document.createElement("td");
+                let td = document.createElement("td");
 
                 td.innerHTML = buttons[i][j];
 
@@ -232,5 +232,5 @@ class Calc {
 
 
 
-var myCalc = new Calc();
+let myCalc = new Calc();
 myCalc.build("calc");
