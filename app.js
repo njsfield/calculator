@@ -229,7 +229,7 @@ class Calc {
 
                 td.addEventListener("click", function(event){
 									
-										let evt = event.target.innerHTML;
+										let evt = event.target.innerHTML.toLowerCase();
 									
 										evt = evt == 'x' ? '*' : evt;
 
