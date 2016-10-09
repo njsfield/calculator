@@ -1,14 +1,8 @@
-// Tasks
-//// Use loop in constructor to generate object for values
-/// add object for values for . + ce in constructor
-
-// add object for operands
-
-// object for equals and clear
+'use strict';
 
 class Calc {
 
-    constructor() {
+		constructor() {
 
         this.xreg = '0';
         this.yreg = null;
@@ -31,19 +25,41 @@ class Calc {
             this.values['.'] = x => this.decimal();
             this.values['0'] = x => this.zero();
             this.values['ce'] = x => this.ce();
-            this.values['±'] = x => this.plusMinus();
+            this.values['±'] = x => this.sign();
         
             
         
             // add operands
         
-            ['/','+','x','-'].forEach((opp) => this.operands[opp] = opp);
+            ['/','+','*','-'].forEach((opp) => this.operands[opp] = opp);
         
-            
-        
-            
+                   
         
     };
+    
+    
+    // Methods 
+    
+    numberInput(value) {
+        this.xreg = (this.xreg === '0') ? value : this.xreg + value;
+    }
+    
+    decimal(){
+        this.xreg += (/\./.test(this.xreg)) ? '' : '.';
+    }
+    
+    zero(){
+        this.xreg += (this.xreg !== '0') ? '0' : '';
+    }
+    
+    ce(){
+        this.xreg = '0';
+    }
+    
+    sign(){
+        this.xreg = (this.xreg[0] !== '-') ? '-' + (+this.xreg || '') : (this.xreg.slice(1) || '0');
+    }
+    
 
 
     // handles input
@@ -86,28 +102,6 @@ class Calc {
 
     };
     
-    
-    // Methods 
-    
-    numberInput(value) {
-        this.xreg = (this.xreg === '0') ? value : this.xreg + value;
-    }
-    
-    decimal(){
-        this.xreg += (/\./.test(this.xreg)) ? '' : '.';
-    }
-    
-    zero(){
-        this.xreg += (this.xreg !== '0') ? '0' : '';
-    }
-    
-    ce(){
-        this.xreg = '0';
-    }
-    
-    plusMinus(){
-        this.xreg = (this.xreg[0] !== '-') ? '-' + (+this.xreg || '') : (this.xreg.slice(1) || '0');
-    }
 
 
     // handle flag
@@ -156,8 +150,6 @@ class Calc {
     calculate() {
 
         if (this.yreg === null) return;
-
-        if (this.flag === "x") this.flag = "*";
 
         let evalFunction = new Function("x", "y", "return y " + this.flag + " x;")
 
@@ -236,8 +228,12 @@ class Calc {
                 // event listener to fire handleInput function with correct value when pressed
 
                 td.addEventListener("click", function(event){
+									
+										let evt = event.target.innerHTML;
+									
+										evt = evt == 'x' ? '*' : evt;
 
-                    that.handleInput(event.target.innerHTML);
+                    that.handleInput(evt);
 
                 });
 
