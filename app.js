@@ -24,6 +24,8 @@ class Calc {
         } else if (/[/+x-]/.test(value)) {
 
             this.flagRegister(value);
+            this.flag = value;
+            this.xreg = '0';
 
         } else if (value === '='){
 
@@ -101,8 +103,7 @@ class Calc {
             this.calculate();
 
         }
-            this.flag = operator;
-            this.xreg = '0';
+
 
     };
 
